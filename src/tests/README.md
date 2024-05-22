@@ -1,4 +1,4 @@
-1. Go to the site:
+1. Open https://cloud.google.com/.
 2. Click on the icon at the top of the portal page and enter "Google Cloud Platform Pricing Calculator" into the search field.
 3. Perform the search.
 4. Click "Google Cloud Platform Pricing Calculator" in the search results and go to the calculator page.
