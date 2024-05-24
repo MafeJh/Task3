@@ -108,7 +108,9 @@ describe("Google Cloud Computing Page", () => {
     //   "33.830,37 $"
     // );
     //await expect($("//div[.='Estimated cost']/following::label[1]")).toExist();
-    await expect($("div.fbc2ib label.gt0C8e")).toHaveText("33.830,37 $");
+    await expect($("//div[.='Estimated cost']/following::label[1]")).toHaveText(
+      "33.830,37 $"
+    );
 
     // //9. click "Share" to see Total estimated cost
     await $("//span[contains(text(), 'Share')]").click();
@@ -121,6 +123,9 @@ describe("Google Cloud Computing Page", () => {
 
     // 11. verify that the 'Cost Estimate Summary' matches with filled values in Step 6.
     //validate Machine type n1-standard-8, vCPUs: 8, RAM: 30 GB ////span[contains(text(),'n1-standard-8, vCPUs: 8, RAM: 30 GB')]
+
+    const handles = await browser.getWindowHandles();
+    await browser.switchToWindow(handles[1]);
     const OS = await $("(//span[contains(@class,'Kfvdz')])[3]");
     await expect(OS).toHaveText("n1-standard-8, vCPUs: 8, RAM: 30 GB");
     //validate Operating System / Software Paid: SLES
@@ -133,17 +138,17 @@ describe("Google Cloud Computing Page", () => {
     );
     //validate Number of GPUs 2
     await expect(
-      "//span[.='Number of GPUs']/following-sibling::span[1]"
+      $("//span[.='Number of GPUs']/following-sibling::span[1]")
     ).toHaveText("2");
     //validate Local SSD 2x375 GB
     await expect($("//span[.='2x375 GB']")).toHaveText("2x375 GB");
     //validate Number of Instances 4
     await expect(
-      "//span[.='Number of Instances']/following-sibling::span[1]"
-    ).toHaveText("4");
+      $("//span[.='Number of Instances']/following-sibling::span[1]")
+    ).toHaveText("41");
     // validate Provisioning Model Regular
     await expect(
-      "//span[.='Provisioning Model']/following-sibling::span[1]"
+      $("//span[.='Provisioning Model']/following-sibling::span[1]")
     ).toHaveText("Regular");
     // validate Add GPUs true
     await expect($("//span[.='true']")).toHaveText("true");
@@ -156,6 +161,6 @@ describe("Google Cloud Computing Page", () => {
     // validate Total estimated cost 34.682,76 $ $/ mo
     await expect(
       $("//h6[.='Total estimated cost']/following::h6[1]")
-    ).toHaveText("34.682,76 $");
+    ).toHaveText("33.830,37 $");
   });
 });
