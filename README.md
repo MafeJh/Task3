@@ -59,3 +59,18 @@ Click "Open estimate summary" to see the Cost Estimate Summary in a separate bro
 
 Verify that the 'Cost Estimate Summary' matches the values filled in Step 4.
 Verify the total estimated cost.
+
+# Report
+
+For report install the dependencies:
+
+- npm install @wdio/junit-reporter --save-dev
+- npm install @wdio/allure-reporter --save-dev
+- npm install @wdio/sync --save-dev
+
+Run `npx wdio ./src/config/wdio.conf.js`
+
+Generate and view allure report
+
+- allure generate allure-results --clean
+- allure open

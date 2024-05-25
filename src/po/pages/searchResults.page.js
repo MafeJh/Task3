@@ -2,7 +2,9 @@ const BasePage = require("./base.page");
 
 class SearchResultsPage extends BasePage {
   constructor() {
-    super("/?hl=es");
+    super(
+      "/s/results?q=Google%20Cloud%20Platform%20Pricing%20Calculator&text=Google%20Cloud%20Platform%20Pricing%20Calculator"
+    );
   }
 
   get searchResult() {

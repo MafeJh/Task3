@@ -123,7 +123,37 @@ exports.config = {
   // Test reporter for stdout.
   // The only one supported by default is 'dot'
   // see also: https://webdriver.io/docs/dot-reporter
-  reporters: ["spec"],
+  reporters: [
+    "spec",
+    [
+      "junit",
+      {
+        outputDir: "./reports/junit-results",
+        outputFileFormat: function (options) {
+          return `results-${options.cid}.xml`;
+        },
+      },
+    ],
+    [
+      "allure",
+      {
+        outputDir: "allure-results",
+        disableWebdriverStepsReporting: true,
+        disableWebdriverScreenshotsReporting: false,
+      },
+    ],
+  ],
+
+  // Adding the screenshot capture hook
+  afterTest: async function (
+    test,
+    context,
+    { error, result, duration, passed, retries }
+  ) {
+    if (error) {
+      await browser.takeScreenshot();
+    }
+  },
 
   // Options to be passed to Mocha.
   // See the full list at http://mochajs.org/

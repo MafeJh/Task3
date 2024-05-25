@@ -1,5 +1,9 @@
-class ComputeEngineFormComponent {
-  constructor() {}
+const BaseComponent = require("./../common/base.component");
+
+class ComputeEngineFormComponent extends BaseComponent {
+  constructor() {
+    super("body.yDmH0d");
+  }
   get numberOfInstances() {
     return $("div[data-field-type='102']  input[value='1']");
   }
@@ -8,7 +12,7 @@ class ComputeEngineFormComponent {
     return $("//div[@data-field-type='106']");
   }
 
-  get noRecuerdo() {
+  get osSLES() {
     return $("li[data-value='paid-sles']");
   }
 

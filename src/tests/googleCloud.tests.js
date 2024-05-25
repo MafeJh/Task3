@@ -32,9 +32,9 @@ describe("Google Cloud Computing Page", () => {
 
   it("Create a Service in GCP", async () => {
     // 2. Click on the icon at the top of the portal page and enter "Google Cloud Platform Pricing Calculator" into the search field.
-    await homePage.magnifyingGlass.click(); //3. Perform the search.
+    await homePage.header.searchIconButton.click(); //3. Perform the search.
     // 3. Perform the search
-    await homePage.inputSearch.addValue(
+    await homePage.header.inputSearch.addValue(
       "Google Cloud Platform Pricing Calculator"
     );
     await browser.keys("Enter");
@@ -42,20 +42,28 @@ describe("Google Cloud Computing Page", () => {
     await resultsPage.searchResult.click();
     // click on add to estimate
     await pricingCalculatorPage.addToEstimateBtn.click();
-    // 5. Click COMPUTE ENGINE at the top of the page.
-    await pricingCalculatorPage.computeEngineCard.waitForClickable({
+    // validate the title from the dialog for add the product compute engine
+    await pricingCalculatorPage.dialog.title.waitForClickable({
       timeout: 5000,
     });
-    await pricingCalculatorPage.computeEngineCard.click();
-    // // 6. Fill out the form with the following data:
-    // //    - Number of instances: 4
+    await expect(pricingCalculatorPage.dialog.title).toExist();
+    // validate the search products input
+    await expect(pricingCalculatorPage.dialog.searchProductsInput).toExist();
+    // 5. Click COMPUTE ENGINE at the top of the page.
+    await pricingCalculatorPage.dialog.computeEngineCard.waitForClickable({
+      timeout: 5000,
+    });
+    await pricingCalculatorPage.dialog.computeEngineCard.click();
+    //  6. Fill out the form with the following data:
+    //     - Number of instances: 4
     await computeEngineFormPage.form.numberOfInstances.setValue("4");
-    // // //Select the OS dropdown - Operating System / Software: Free: Debian, CentOS, CoreOS, Ubuntu, or another User-Provided OS
+    //Select the OS dropdown - Operating System / Software: paid-sles OS
     const element = await computeEngineFormPage.form.selectOSDropdown;
     await element.waitForDisplayed({ timeout: 5000 });
     await element.scrollIntoView({ block: "center", inline: "center" });
     await element.click();
-    await computeEngineFormPage.form.noRecuerdo.click();
+    await computeEngineFormPage.form.osSLES.waitForDisplayed({ timeout: 5000 });
+    await computeEngineFormPage.form.osSLES.click();
 
     // validate regular button from Provisioning Model
     await expect(computeEngineFormPage.form.buttonRegular).toExist();
@@ -68,38 +76,44 @@ describe("Google Cloud Computing Page", () => {
     await expect(computeEngineFormPage.form.seriesDropdown).toExist();
     await expect(computeEngineFormPage.form.N1Option).toExist();
 
-    // // // Machine type* dropdown
+    // Machine type* dropdown
     // click on machine type an open the list
     await computeEngineFormPage.form.machineTypeDropdown.click();
-    // click on 'n1-standard-2' option
+    // click on  n1-standard-2 (vCPUs: 2, RAM: 7.5 GB)
     await computeEngineFormPage.form.n1Standar2.click();
 
-    // // validate to exist - Select “Add GPUs“
-    await expect(
-      $("button[jsname='DMn7nd'][aria-label='Add GPUs'] span.eBlXUe-hywKDc")
-    ).toExist();
-    // - Select “Add GPUs“
-    await $(
-      "button[jsname='DMn7nd'][aria-label='Add GPUs'] span.eBlXUe-hywKDc"
-    ).click();
+    // validate to exist - Select “Add GPUs“
 
-    // // validate to exist - Select “Add GPUs“
-    // await expect(computeEngineFormPage.form.addGPUS).toExist();
+    // await expect(
+    //   $("button[jsname='DMn7nd'][aria-label='Add GPUs'] span.eBlXUe-hywKDc")
+    // ).toExist();
     // // - Select “Add GPUs“
-    // await $(computeEngineFormPage.form.addGPUS).waitForClickable({ timeout: 5000 });
-    // await $(computeEngineFormPage.form.addGPUS).click();
+    // await $(
+    //   "button[jsname='DMn7nd'][aria-label='Add GPUs'] span.eBlXUe-hywKDc"
+    // ).click();
+    //------DESCOMENTE ESTO
+    // // validate to exist - Select “Add GPUs“
+    await computeEngineFormPage.form.addGPUS.waitForDisplayed({
+      timeout: 5000,
+    });
+    await expect(computeEngineFormPage.form.addGPUS).toExist();
+    // - Select “Add GPUs“
+    await computeEngineFormPage.form.addGPUS.waitForClickable({
+      timeout: 5000,
+    });
+    await computeEngineFormPage.form.addGPUS.click();
 
-    // // click on GPU MODEL
+    //click on GPU MODEL
     await computeEngineFormPage.form.GPUmodelDropdown.click();
     // select _ GPU type: NVIDIA Tesla V100
     await computeEngineFormPage.form.NVIDIATeslaP4Option.click();
 
-    // // click on Number of GPUs: 1
+    // click on Number of GPUs:
     await computeEngineFormPage.form.numberOfGPUsDropdown.click();
     // select Number of GPUs: 2
     await computeEngineFormPage.form.twoGPUsOption.click();
 
-    // // click on  - Local SSD:
+    // click on  - Local SSD:
     await computeEngineFormPage.form.localSSDDropdown.click();
     // select  - Local SSD: 2x375 Gb
     await computeEngineFormPage.form.twox375.click();

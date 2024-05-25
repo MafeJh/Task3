@@ -1,9 +1,11 @@
 const BasePage = require("./base.page");
-const ComputeEngineFormComponent = require("./../components/compute-engine-form/computeEngineForm.component");
+const ComputeEngineFormComponent = require("../components/computeEngineForm/computeEngineForm.component");
 
 class ComputeEngineFormPage extends BasePage {
   constructor() {
-    super("/?hl=es");
+    super(
+      "/products/calculator?hl=es&dl=CiQ3NmY1N2ViOC0wMTYzLTRlM2EtODM0NS04ZGQxYmNlZWE4MTUQCBokRjg5OUI5MUUtMTczMy00ODVELTg3RUEtMDlFMTA5RDg4NTc4"
+    );
     this.form = new ComputeEngineFormComponent();
   }
 
@@ -18,8 +20,6 @@ class ComputeEngineFormPage extends BasePage {
   get openEstimateSummary() {
     return $("//a[.='Open estimate summary']");
   }
-  get() {}
-  get() {}
 }
 
 module.exports = ComputeEngineFormPage;

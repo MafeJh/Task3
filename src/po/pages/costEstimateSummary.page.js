@@ -2,7 +2,9 @@ const BasePage = require("./base.page");
 
 class CostEstimateSummaryPage extends BasePage {
   constructor() {
-    super("/?hl=es");
+    super(
+      "/products/calculator/estimate-preview/76f57eb8-0163-4e3a-8345-8dd1bceea815?hl=es"
+    );
   }
 
   get machineType() {
