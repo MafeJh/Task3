@@ -1,5 +1,8 @@
 const HomePage = require("./homeGoogleCloud.page");
-
+const SearchResultsPage = require("./searchResults.page");
+const PricingCalculatorPage = require("./pricingCalculator.page");
+const ComputeEngineFormPage = require("./computeEngineForm.page");
+const CostEstimateSummaryPage = require("./costEstimateSummary.page");
 /**
  *
  * @param {*} page {'Home'}
@@ -10,8 +13,12 @@ const HomePage = require("./homeGoogleCloud.page");
 function pages(page) {
   const items = {
     home: new HomePage(),
+    results: new SearchResultsPage(),
+    pricingCalculator: new PricingCalculatorPage(),
+    computeEngineForm: new ComputeEngineFormPage(),
+    costEstimateSummary: new CostEstimateSummaryPage(),
   };
-  return items[page.toLowerCase()];
+  return items[page];
 }
 
-module.exports = { HomePage, pages };
+module.exports = { pages };

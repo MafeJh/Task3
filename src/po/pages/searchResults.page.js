@@ -1,15 +1,8 @@
 const BasePage = require("./base.page");
 
-class HomePage extends BasePage {
+class SearchResultsPage extends BasePage {
   constructor() {
     super("/?hl=es");
-  }
-  get magnifyingGlass() {
-    return $("div.YSM5S");
-  }
-
-  get inputSearch() {
-    return $("input[type='text']");
   }
 
   get searchResult() {
@@ -17,4 +10,4 @@ class HomePage extends BasePage {
   }
 }
 
-module.exports = HomePage;
+module.exports = SearchResultsPage;
