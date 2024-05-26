@@ -48,7 +48,7 @@ class CostEstimateSummaryPage extends BasePage {
   }
 
   get totalCost() {
-    return $("//h6[.='Total estimated cost']/following::h6[1]");
+    return $("div.EOYkJe");
   }
 
   async validateCostEstimatedSummary(data) {
@@ -74,7 +74,9 @@ class CostEstimateSummaryPage extends BasePage {
     // Committed use discount options 1 year
     await expect(this.discountTime).toHaveText(data.discount_time);
     // validate Total estimated cost 2637,35 $ / mo
-    await expect(this.totalCost).toHaveText(data.total_cost);
+    const costEstimatedText = await this.totalCost;
+    const costEstimatedTextExpected = "Total estimated cost\n2637,35 $/ mo";
+    await expect(costEstimatedText).toHaveText(costEstimatedTextExpected);
   }
 }
 
