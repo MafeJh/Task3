@@ -1,8 +1,10 @@
 const BasePage = require("./base.page");
+const ProductsDialogComponent = require("./../components/pricingCalculator/productsDialog.component");
 
 class PricingCalculatorPage extends BasePage {
   constructor() {
-    super("/?hl=es");
+    super("/products/calculator?hl=es");
+    this.dialog = new ProductsDialogComponent();
   }
   get addToEstimateBtn() {
     return $(
@@ -10,10 +12,31 @@ class PricingCalculatorPage extends BasePage {
     );
   }
 
-  get computeEngineCard() {
-    return $(
-      "// div[@class='VobRQb'][1] // div[@class='aHij0b-WsjYwc aHij0b-WsjYwc-OWXEXe-wdeprb-MD85tf-DKzjMe b9Ejl']"
-    );
+  async clickOnAddToEstimate() {
+    await this.addToEstimateBtn.click();
+  }
+
+  async validatePricingDialogTitleExists() {
+    await this.dialog.title.waitForExist({
+      timeout: 5000,
+    });
+    await expect(this.dialog.title).toExist();
+  }
+
+  async validateSearchProductsInputExists() {
+    await expect(this.dialog.searchProductsInput).toExist();
+  }
+
+  async clickOnComputeEngineCard() {
+    await this.dialog.computeEngineCard.waitForClickable({
+      timeout: 5000,
+    });
+    await this.dialog.computeEngineCard.click();
+  }
+
+  async validateDialogElements() {
+    await this.validatePricingDialogTitleExists();
+    await this.validateSearchProductsInputExists();
   }
 }
 module.exports = PricingCalculatorPage;

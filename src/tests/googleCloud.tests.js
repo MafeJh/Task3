@@ -1,4 +1,5 @@
-const { pages, HomePage } = require("./../po");
+const { pages } = require("./../po");
+const dataset = require("../utils/google-cloud-computing.dataset.json");
 
 describe("Google Cloud Computing Page", () => {
   let homePage = null;
@@ -14,8 +15,6 @@ describe("Google Cloud Computing Page", () => {
     pricingCalculatorPage = pages("pricingCalculator");
     computeEngineFormPage = pages("computeEngineForm");
     costEstimateSummaryPage = pages("costEstimateSummary");
-
-    //results = pages("results");
     // Open URL
     await browser.maximizeWindow();
     await browser.deleteCookies();
@@ -32,135 +31,59 @@ describe("Google Cloud Computing Page", () => {
 
   it("Create a Service in GCP", async () => {
     // 2. Click on the icon at the top of the portal page and enter "Google Cloud Platform Pricing Calculator" into the search field.
-    await homePage.magnifyingGlass.click(); //3. Perform the search.
+    await homePage.clickOnSearchIconButton();
     // 3. Perform the search
-    await homePage.inputSearch.addValue(
-      "Google Cloud Platform Pricing Calculator"
-    );
-    await browser.keys("Enter");
+    await homePage.performSearch(dataset.home_google_cloud.pricing_calculator);
     // 4. Click "Google Cloud Platform Pricing Calculator" in the search results and go to the calculator page.
-    await resultsPage.searchResult.click();
-    // click on add to estimate
-    await pricingCalculatorPage.addToEstimateBtn.click();
+    await resultsPage.clickOnSearchResult();
+    // Click on add to estimate
+    await pricingCalculatorPage.clickOnAddToEstimate();
+    // Validate the title and search products input from the dialog
+    await pricingCalculatorPage.validateDialogElements();
     // 5. Click COMPUTE ENGINE at the top of the page.
-    await pricingCalculatorPage.computeEngineCard.waitForClickable({
-      timeout: 5000,
-    });
-    await pricingCalculatorPage.computeEngineCard.click();
-    // // 6. Fill out the form with the following data:
-    // //    - Number of instances: 4
-    await computeEngineFormPage.form.numberOfInstances.setValue("4");
-    // // //Select the OS dropdown - Operating System / Software: Free: Debian, CentOS, CoreOS, Ubuntu, or another User-Provided OS
-    const element = await computeEngineFormPage.form.selectOSDropdown;
-    await element.waitForDisplayed({ timeout: 5000 });
-    await element.scrollIntoView({ block: "center", inline: "center" });
-    await element.click();
-    await computeEngineFormPage.form.noRecuerdo.click();
-
+    await pricingCalculatorPage.clickOnComputeEngineCard();
+    //  6. Fill out the form with the following data:
+    //     - Number of instances: 4
+    await computeEngineFormPage.setInstances(
+      dataset.compute_engine_form.instances
+    );
+    // Select the OS dropdown - Operating System / Software: paid-sles OS
+    await computeEngineFormPage.selectOperatingSystem("sles");
     // validate regular button from Provisioning Model
-    await expect(computeEngineFormPage.form.buttonRegular).toExist();
-
-    // validate the Machine Family: Memory-optimized  dropdown
-    await expect(computeEngineFormPage.form.machineFamilyDropdown).toExist();
-    await expect(computeEngineFormPage.form.generalPurposeOption).toExist();
-
-    // validate    - Series: N1
-    await expect(computeEngineFormPage.form.seriesDropdown).toExist();
-    await expect(computeEngineFormPage.form.N1Option).toExist();
-
-    // // // Machine type* dropdown
-    // click on machine type an open the list
-    await computeEngineFormPage.form.machineTypeDropdown.click();
-    // click on 'n1-standard-2' option
-    await computeEngineFormPage.form.n1Standar2.click();
-
-    // // validate to exist - Select “Add GPUs“
-    await expect(
-      $("button[jsname='DMn7nd'][aria-label='Add GPUs'] span.eBlXUe-hywKDc")
-    ).toExist();
-    // - Select “Add GPUs“
-    await $(
-      "button[jsname='DMn7nd'][aria-label='Add GPUs'] span.eBlXUe-hywKDc"
-    ).click();
-
-    // // validate to exist - Select “Add GPUs“
-    // await expect(computeEngineFormPage.form.addGPUS).toExist();
-    // // - Select “Add GPUs“
-    // await $(computeEngineFormPage.form.addGPUS).waitForClickable({ timeout: 5000 });
-    // await $(computeEngineFormPage.form.addGPUS).click();
-
-    // // click on GPU MODEL
-    await computeEngineFormPage.form.GPUmodelDropdown.click();
-    // select _ GPU type: NVIDIA Tesla V100
-    await computeEngineFormPage.form.NVIDIATeslaP4Option.click();
-
-    // // click on Number of GPUs: 1
-    await computeEngineFormPage.form.numberOfGPUsDropdown.click();
-    // select Number of GPUs: 2
-    await computeEngineFormPage.form.twoGPUsOption.click();
-
-    // // click on  - Local SSD:
-    await computeEngineFormPage.form.localSSDDropdown.click();
-    // select  - Local SSD: 2x375 Gb
-    await computeEngineFormPage.form.twox375.click();
-
-    // Click on region - Datacenter location:
-    await computeEngineFormPage.form.regionDropdown.click();
-    // Select - Datacenter location: Northern Virginia (us-east4)
-    await computeEngineFormPage.form.northernVirginiaDataCenterOption.click();
-
-    // - Committed usage: 1 Year
-    await computeEngineFormPage.form.commitedUsage.click();
-
-    //7. valudate - 'Add to Estimate'.  //modified step
-    await expect(computeEngineFormPage.form.addToEstimateSubmit).toExist();
-
+    await computeEngineFormPage.validateProvisioningModelIsRegular();
+    // Select the Machine Family: General purpose dropdown
+    await computeEngineFormPage.selectMachineFamily("general");
+    // Select Machine Type Series: N1
+    await computeEngineFormPage.selectMachineSeries("n1");
+    // Select Machine Type: n1-standard-2
+    await computeEngineFormPage.selectMachineType("n1_standard_2");
+    // Toggle Add GPUs
+    await computeEngineFormPage.toggleAddGPUs();
+    // Select GPU Model: NVIDIA Tesla P4
+    await computeEngineFormPage.selectGPUModel("nvidia_tesla_p4");
+    // Select Number of GPUs: 2
+    await computeEngineFormPage.selectNumberOfGPUs("2");
+    // Select Local SSD: 2x375 Gb
+    await computeEngineFormPage.selectLocalSSD("2x375");
+    // Select - Data center location: Northern Virginia (us-east4)
+    await computeEngineFormPage.selectRegion("us-east4");
+    // Click on committed usage: 1 Year
+    await computeEngineFormPage.clickOnCommittedUsageButton();
+    // 7. Validate - 'Add to Estimate'. - Modified step
+    await computeEngineFormPage.validateAddToEstimateButtonSubmit();
     // 8. Check the price is calculated in the right section of the calculator. There is a line “Total Estimated Cost: USD ${amount} per 1 month”
-    await expect(computeEngineFormPage.estimatedCost).toHaveText("2.637,35 $");
+    await computeEngineFormPage.validateEstimatedCost(
+      dataset.compute_engine_form
+    );
     // 9. click "Share" to see Total estimated cost
-    await computeEngineFormPage.shareButton.click();
-
+    await computeEngineFormPage.clickOnShareButton();
     // 10. click "Open estimate summary" to see Cost Estimate Summary, will be opened in separate tab browser.
-    await computeEngineFormPage.openEstimateSummary.waitForClickable({
-      timeout: 5000,
-    });
-    await computeEngineFormPage.openEstimateSummary.click();
-
+    await computeEngineFormPage.goToEstimatedSummary();
     // 11. verify that the 'Cost Estimate Summary' matches with filled values in Step 6.
     const handles = await browser.getWindowHandles();
     await browser.switchToWindow(handles[1]);
-
-    const machineType = await costEstimateSummaryPage.machineType;
-    await expect(machineType).toHaveText(
-      "n1-standard-2, vCPUs: 2, RAM: 7.5 GB"
+    await costEstimateSummaryPage.validateCostEstimatedSummary(
+      dataset.cost_estimated_summary
     );
-    //validate Operating System / Software Paid: SLES
-    await expect(costEstimateSummaryPage.operatingSystem).toHaveText(
-      "Paid: SLES"
-    );
-    //validate GPU Model NVIDIA TESLA P4
-    await expect(costEstimateSummaryPage.gpuModel).toHaveText(
-      "NVIDIA TESLA P4"
-    );
-    //validate Number of GPUs 2
-    await expect(costEstimateSummaryPage.numberOfGPUs).toHaveText("2");
-    //validate Local SSD 2x375 GB
-    await expect(costEstimateSummaryPage.localSSD).toHaveText("2x375 GB");
-    //validate Number of Instances 4
-    await expect(costEstimateSummaryPage.numberOfInstances).toHaveText("4");
-    // validate Provisioning Model Regular
-    await expect(costEstimateSummaryPage.provisingModelRegular).toHaveText(
-      "Regular"
-    );
-    // validate Add GPUs true
-    await expect(costEstimateSummaryPage.addGPUSSwitch).toHaveText("true");
-    // Region Northern Virginia (us-east4)
-    await expect(costEstimateSummaryPage.regionDataCenter).toHaveText(
-      "Northern Virginia (us-east4)"
-    );
-    // Committed use discount options 1 year
-    await expect(costEstimateSummaryPage.discountTime).toHaveText("1 year");
-    // validate Total estimated cost 34.682,76 $ $/ mo
-    await expect(costEstimateSummaryPage.totalCost).toHaveText("2637,35 $");
   });
 });
