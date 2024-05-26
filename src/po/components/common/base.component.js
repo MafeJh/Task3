@@ -7,8 +7,8 @@ class BaseComponent {
     return $(this.rootSelector);
   }
 
-  item(element, selectors, option) {
-    return element.$(selectors[option.toLowerCase()]);
+  item(parentElement, options, option) {
+    return parentElement.$(options[option.toLowerCase()]);
   }
 }
 

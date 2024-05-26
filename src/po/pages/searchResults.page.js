@@ -10,6 +10,10 @@ class SearchResultsPage extends BasePage {
   get searchResult() {
     return $("//b[contains(text(),'Google Cloud Pricing Calculator')]");
   }
+
+  async clickOnSearchResult() {
+    await this.searchResult.click();
+  }
 }
 
 module.exports = SearchResultsPage;

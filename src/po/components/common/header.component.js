@@ -8,7 +8,7 @@ class HeaderComponent extends BaseComponent {
     return this.rootEl.$("div.YSM5S");
   }
 
-  get inputSearch() {
+  get searchInput() {
     return this.rootEl.$("input[type='text']");
   }
 }

@@ -10,6 +10,10 @@
     "allure-commandline": "^2.29.0"
   },
   "scripts": {
-    "wdio": "wdio run ./src/config/wdio.conf.js"
+    "clean": "rm -R allure-report/* && rm -R allure-results/*",
+    "wdio": "wdio run ./src/config/wdio.conf.js",
+    "allure:generate": "allure generate allure-results --clean",
+    "allure:open": "allure open",
+    "allure:report": "npm run test && npm run allure:generate && npm run allure:open"
   }
 }
