@@ -1,7 +1,13 @@
+const environment = process.env.NODE_ENV || "dev";
+const CONFIG_ENV = {
+  smoke: ["./../tests/googleCloudSmoke.tests.js"],
+  dev: ["./../tests/*.tests.js"],
+  prod: ["./../tests/*.tests.js"],
+};
+
 exports.config = {
   runner: "local",
-
-  specs: ["./../tests/*.tests.js"],
+  specs: CONFIG_ENV[environment.trim()],
   exclude: [],
 
   maxInstances: 10,

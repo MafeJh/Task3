@@ -1,4 +1,4 @@
-const { pages } = require("./../po");
+const { pages } = require("../po");
 const { datasets } = require("../utils");
 const env = process.env.NODE_ENV;
 
@@ -12,8 +12,8 @@ describe(`${env.toUpperCase()}: Google Cloud Computing Page`, () => {
 
   beforeEach(async () => {
     // Get dataset
-    const environment = process.env.NODE_ENV || "dev";
-    dataset = datasets(environment.trim());
+    dataset = datasets("smoke");
+
     // Instances
     homePage = pages("home");
     resultsPage = pages("results");
@@ -35,8 +35,7 @@ describe(`${env.toUpperCase()}: Google Cloud Computing Page`, () => {
     dataset = null;
   });
 
-  it("Create a Service in GCP", async () => {
-    const formData = dataset.compute_engine_form;
+  it(`Create a Service in GCP`, async () => {
     // 2. Click on the icon at the top of the portal page and enter "Google Cloud Platform Pricing Calculator" into the search field.
     await homePage.clickOnSearchIconButton();
     // 3. Perform the search
@@ -45,42 +44,35 @@ describe(`${env.toUpperCase()}: Google Cloud Computing Page`, () => {
     await resultsPage.clickOnSearchResult();
     // Click on add to estimate
     await pricingCalculatorPage.clickOnAddToEstimate();
-    // Validate the title and search products input from the dialog
-    await pricingCalculatorPage.validateDialogElements();
     // 5. Click COMPUTE ENGINE at the top of the page.
     await pricingCalculatorPage.clickOnComputeEngineCard();
-    //  6. Fill out the form with the following data:
-    // Number of instances
-    await computeEngineFormPage.setInstances(formData.instances);
-    // Select the OS dropdown - Operating System / Software
-    await computeEngineFormPage.selectOperatingSystem(
-      formData.operating_system
-    );
-    // Click on Provisioning Model
-    await computeEngineFormPage.clickOnProvisioningModel(
-      formData.provisional_model
-    );
-    // Select the Machine Family
-    await computeEngineFormPage.selectMachineFamily(formData.machine_family);
-    // Select Machine Type Series
-    await computeEngineFormPage.selectMachineSeries(formData.machine_series);
-    // Select Machine Type
-    await computeEngineFormPage.selectMachineType(formData.machine_type);
-
-    // Toggle Add GPUs
+    //  6. Validate the items in the form Exist:
+    //     Validate number of instances
+    await expect(computeEngineFormPage.form.numberOfInstances).toExist();
+    // Validate OS dropdown - Operating System / Software: paid-sles OS
+    await expect(computeEngineFormPage.form.operatingSystemDropdown).toExist();
+    // validate regular button from Provisioning Model
+    await expect(
+      computeEngineFormPage.form.provisioningModel(
+        dataset.compute_engine_form.provisioning_model
+      )
+    ).toExist();
+    // validate Machine Type Series
+    await expect(computeEngineFormPage.form.machineSeriesDropdown).toExist();
+    // validate Machine Type
+    await expect(computeEngineFormPage.form.machineTypeDropdown).toExist();
+    // Toggle Add GPUs -> Because this displayed the other options to verify
     await computeEngineFormPage.toggleAddGPUs();
-    // Select GPU Model
-    await computeEngineFormPage.selectGPUModel(formData.GPU_Model);
-    // Select Number of GPUs
-    await computeEngineFormPage.selectNumberOfGPUs(formData.GPUs);
-    // Select Local SSD
-    await computeEngineFormPage.selectLocalSSD(formData.local_SSD);
-    // Select - Data center location
-    await computeEngineFormPage.selectRegion(formData.region_data_center);
-    // Click on committed usage
-    await computeEngineFormPage.clickOnCommittedUsageButton(
-      formData.committed_usage
-    );
+    // validate GPU Model
+    await expect(computeEngineFormPage.form.gpuModelDropdown).toExist();
+    // validate Number of GPUs
+    await expect(computeEngineFormPage.form.numberOfGPUsDropdown).toExist();
+    // validate Local SSD
+    await expect(computeEngineFormPage.form.localSSDDropdown).toExist();
+    // validate - Data center location
+    await expect(computeEngineFormPage.form.regionDropdown).toExist();
+    // validate on committed usage
+    await expect(computeEngineFormPage.form.committedUsage(3)).toExist();
     // 7. Validate - 'Add to Estimate'. - Modified step
     await computeEngineFormPage.validateAddToEstimateButtonSubmit();
     // 8. Check the price is calculated in the right section of the calculator. There is a line “Total Estimated Cost: USD ${amount} per 1 month”
@@ -94,8 +86,13 @@ describe(`${env.toUpperCase()}: Google Cloud Computing Page`, () => {
     // 11. verify that the 'Cost Estimate Summary' matches with filled values in Step 6.
     const handles = await browser.getWindowHandles();
     await browser.switchToWindow(handles[1]);
-    await costEstimateSummaryPage.validateCostEstimatedSummary(
-      dataset.cost_estimated_summary
+    // await costEstimateSummaryPage.validateCostEstimatedSummary(
+    //   dataset.cost_estimated_summary
+    // );
+
+    // validate Total estimated cost {amount} $ / mo
+    await expect(await costEstimateSummaryPage.totalCost).toHaveText(
+      dataset.cost_estimated_summary.estimated_cost
     );
   });
 });

@@ -1,0 +1,32 @@
+{
+  "home_google_cloud": {
+    "pricing_calculator": "Google Cloud Platform Pricing Calculator"
+  },
+  "compute_engine_form": {
+    "instances": "5",
+    "operating_system": "ubuntu_pro",
+    "provisional_model": "spot",
+    "machine_family": "general",
+    "machine_series": "n1",
+    "machine_type": "n1_standard_16",
+    "GPU_Model": "nvidia_tesla_p100",
+    "GPUs": "4",
+    "local_SSD": "4x375",
+    "region_data_center": "us-central1",
+    "committed_usage": "3",
+    "estimated_cost": "10.087,37 $"
+  },
+  "cost_estimated_summary": {
+    "instances": "5",
+    "machine_type": "n1-standard-16, vCPUs: 16, RAM: 60 GB",
+    "operating_system": "Paid: Ubuntu Pro",
+    "GPU_Model": "NVIDIA TESLA P100",
+    "GPUs": "4",
+    "local_SSD": "4x375 GB",
+    "provisional_model": "Spot (Preemptible VM)",
+    "add_GPUs": "true",
+    "region_data_center": "Iowa (us-central1)",
+    "discount_time": "3 years",
+    "estimated_cost": "Total estimated cost\n10.087,37 $/ mo"
+  }
+}

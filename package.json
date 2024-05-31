@@ -11,7 +11,10 @@
   },
   "scripts": {
     "clean": "rm -R allure-report/* && rm -R allure-results/*",
-    "wdio": "wdio run ./src/config/wdio.conf.js",
+    "wdio": "npm run wdio:dev",
+    "wdio:smoke": "set NODE_ENV=smoke && wdio ./src/config/wdio.conf.js",
+    "wdio:dev": "set NODE_ENV=dev && wdio ./src/config/wdio.conf.js",
+    "wdio:prod": "set NODE_ENV=prod && wdio ./src/config/wdio.conf.js",
     "allure:generate": "allure generate allure-results --clean",
     "allure:open": "allure open",
     "allure:report": "npm run test && npm run allure:generate && npm run allure:open"

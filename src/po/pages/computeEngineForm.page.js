@@ -1,6 +1,6 @@
 const BasePage = require("./base.page");
-const ComputeEngineFormComponent = require("../components/computeEngineForm/computeEngineForm.component");
-const CostDetailComponent = require("../components/computeEngineForm/costDetail.component");
+const FormComponent = require("../components/form/form.component");
+const CostDetailComponent = require("../components/costDetail/costDetail.component");
 const CostSummaryDialogComponent = require("./../components/costSummaryDialog/costSummaryDialog.component");
 
 class ComputeEngineFormPage extends BasePage {
@@ -8,14 +8,15 @@ class ComputeEngineFormPage extends BasePage {
     super(
       "/products/calculator?hl=es&dl=CiQ3NmY1N2ViOC0wMTYzLTRlM2EtODM0NS04ZGQxYmNlZWE4MTUQCBokRjg5OUI5MUUtMTczMy00ODVELTg3RUEtMDlFMTA5RDg4NTc4"
     );
-    this.form = new ComputeEngineFormComponent();
+    this.form = new FormComponent();
     this.costDetail = new CostDetailComponent();
     this.costSummaryDialog = new CostSummaryDialogComponent();
   }
 
   async goToEstimatedSummary() {
+    await this.costSummaryDialog.rootEl.waitForDisplayed({ timeout: 5000 });
     await this.costSummaryDialog.estimatedSummary.waitForClickable({
-      timeout: 5000,
+      timeout: 10000,
     });
     await this.costSummaryDialog.estimatedSummary.click();
   }
@@ -37,6 +38,7 @@ class ComputeEngineFormPage extends BasePage {
   async selectOperatingSystem(operatingSystem) {
     const selectors = {
       sles: "li[data-value='paid-sles']",
+      ubuntu_pro: "li[data-value='paid-ubuntu-pro']",
     };
     await this.clickOnOperatingSystemDropdown();
     const item = this.form.item(
@@ -48,8 +50,10 @@ class ComputeEngineFormPage extends BasePage {
     await item.click();
   }
 
-  async validateProvisioningModelIsRegular() {
-    await expect(this.form.provisioningModelRegular).toExist();
+  async clickOnProvisioningModel(provisioningModel) {
+    const item = this.form.provisioningModel(provisioningModel);
+    await item.waitForDisplayed({ timeout: 5000 });
+    await item.click();
   }
 
   async clickOnMachineFamilyDropdown() {
@@ -61,6 +65,8 @@ class ComputeEngineFormPage extends BasePage {
   async selectMachineFamily(machineFamily) {
     const selectors = {
       general: "li[data-value='general-purpose']",
+      compute: "li[data-value='compute-optimized']",
+      accelerator: "li[data-value='accelerator-optimized']",
     };
     await this.clickOnMachineFamilyDropdown();
     const item = this.form.item(
@@ -79,6 +85,7 @@ class ComputeEngineFormPage extends BasePage {
   }
 
   async selectMachineSeries(machineSeries) {
+    // GPUs are available for N1, A2, and G2 machine series
     const selectors = {
       n1: "li[data-value='n1']",
     };
@@ -101,6 +108,9 @@ class ComputeEngineFormPage extends BasePage {
   async selectMachineType(machineType) {
     const selectors = {
       n1_standard_2: "li[data-value='n1-standard-2']",
+      n1_standard_4: "li[data-value='n1-standard-4']",
+      n1_standard_8: "li[data-value='n1-standard-8']",
+      n1_standard_16: "li[data-value='n1-standard-16']",
     };
     await this.clickOnMachineTypeDropdown();
     const item = this.form.item(
@@ -127,7 +137,11 @@ class ComputeEngineFormPage extends BasePage {
 
   async selectGPUModel(model) {
     const selectors = {
+      nvidia_t4: "li[data-value='nvidia-t4']",
+      nvidia_v100: "li[data-value='nvidia-v100']",
       nvidia_tesla_p4: "li[data-value='nvidia-tesla-p4']",
+      nvidia_tesla_p100: "li[data-value='nvidia-tesla-p100']",
+      nvidia_tesla_k80: "li[data-value='nvidia-tesla-k80']",
     };
     await this.clickOnGPUModelDropdown();
     const item = this.form.item(this.form.gpuModelDropdown, selectors, model);
@@ -143,27 +157,9 @@ class ComputeEngineFormPage extends BasePage {
 
   async selectNumberOfGPUs(number) {
     const selectors = {
+      1: "li[data-value='1']",
       2: "li[data-value='2']",
-    };
-    await this.clickOnNumberOfGPUsDropdown();
-    const item = this.form.item(
-      this.form.numberOfGPUsDropdown,
-      selectors,
-      number
-    );
-    await item.waitForDisplayed({ timeout: 5000 });
-    await item.click();
-  }
-
-  async clickOnNumberOfGPUsDropdown() {
-    const dropdown = await this.form.numberOfGPUsDropdown;
-    await dropdown.waitForDisplayed({ timeout: 5000 });
-    await dropdown.click();
-  }
-
-  async selectNumberOfGPUs(number) {
-    const selectors = {
-      2: "li[data-value='2']",
+      4: "li[data-value='4']",
     };
     await this.clickOnNumberOfGPUsDropdown();
     const item = this.form.item(
@@ -183,7 +179,10 @@ class ComputeEngineFormPage extends BasePage {
 
   async selectLocalSSD(localSSD) {
     const selectors = {
+      "0x0": "li[data-value='0']",
       "2x375": "li[data-value='2']",
+      "3x375": "li[data-value='3']",
+      "4x375": "li[data-value='4']",
     };
     await this.clickOnLocalSSDDropdown();
     const item = this.form.item(
@@ -204,6 +203,7 @@ class ComputeEngineFormPage extends BasePage {
   async selectRegion(region) {
     const selectors = {
       "us-east4": "li[data-value='us-east4']",
+      "us-central1": "li[data-value='us-central1']",
     };
     await this.clickOnRegionDropdown();
     const item = this.form.item(this.form.regionDropdown, selectors, region);
@@ -211,8 +211,8 @@ class ComputeEngineFormPage extends BasePage {
     await item.click();
   }
 
-  async clickOnCommittedUsageButton() {
-    const button = await this.form.committedUsage;
+  async clickOnCommittedUsageButton(usage) {
+    const button = await this.form.committedUsage(usage);
     await button.waitForDisplayed({ timeout: 5000 });
     await button.click();
   }
@@ -223,7 +223,7 @@ class ComputeEngineFormPage extends BasePage {
 
   async clickOnShareButton() {
     const button = await this.costDetail.shareButton;
-    await button.waitForDisplayed({ timeout: 5000 });
+    await button.waitForDisplayed({ timeout: 10000 });
     await button.click();
   }
 }

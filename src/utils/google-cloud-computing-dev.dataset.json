@@ -1,0 +1,32 @@
+{
+  "home_google_cloud": {
+    "pricing_calculator": "Google Cloud Platform Pricing Calculator"
+  },
+  "compute_engine_form": {
+    "instances": "4",
+    "estimated_cost": "2.637,35 $",
+    "operating_system": "sles",
+    "provisional_model": "regular",
+    "machine_family": "general",
+    "machine_series": "n1",
+    "machine_type": "n1_standard_2",
+    "GPU_Model": "nvidia_tesla_p4",
+    "GPUs": "2",
+    "local_SSD": "2x375",
+    "region_data_center": "us-east4",
+    "committed_usage": "1"
+  },
+  "cost_estimated_summary": {
+    "machine_type": "n1-standard-2, vCPUs: 2, RAM: 7.5 GB",
+    "operating_system": "Paid: SLES",
+    "GPU_Model": "NVIDIA TESLA P4",
+    "GPUs": "2",
+    "local_SSD": "2x375 GB",
+    "instances": "4",
+    "provisional_model": "Regular",
+    "add_GPUs": "true",
+    "region_data_center": "Northern Virginia (us-east4)",
+    "discount_time": "1 year",
+    "estimated_cost": "Total estimated cost\n2637,35 $/ mo"
+  }
+}

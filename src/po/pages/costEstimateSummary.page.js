@@ -8,15 +8,17 @@ class CostEstimateSummaryPage extends BasePage {
   }
 
   get machineType() {
-    return $("(//span[contains(@class,'Kfvdz')])[3]");
+    return $("//span[.='Machine type']/following-sibling::span[1]");
   }
 
   get operatingSystem() {
-    return $("//span[contains(text(),'Paid: SLES')]");
+    return $(
+      "//span[.='Operating System / Software']/following-sibling::span[1]"
+    );
   }
 
   get gpuModel() {
-    return $("//span[contains(text(),'NVIDIA TESLA P4')]");
+    return $("//span[.='GPU Model']/following-sibling::span[1]");
   }
 
   get numberOfGPUs() {
@@ -24,27 +26,29 @@ class CostEstimateSummaryPage extends BasePage {
   }
 
   get localSSD() {
-    return $("//span[.='2x375 GB']");
+    return $("//span[.='Local SSD']/following-sibling::span[1]");
   }
 
   get numberOfInstances() {
     return $("//span[.='Number of Instances']/following-sibling::span[1]");
   }
 
-  get provisioningModelRegular() {
+  get provisioningModel() {
     return $("//span[.='Provisioning Model']/following-sibling::span[1]");
   }
 
   get addGPUSSwitch() {
-    return $("//span[.='true']");
+    return $("//span[.='Add GPUs']/following-sibling::span[1]");
   }
 
   get regionDataCenter() {
-    return $("//span[.='Northern Virginia (us-east4)']");
+    return $("//span[.='Region']/following-sibling::span[1]");
   }
 
   get discountTime() {
-    return $("//span[.='1 year']");
+    return $(
+      "//span[.='Committed use discount options']/following-sibling::span[1]"
+    );
   }
 
   get totalCost() {
@@ -52,31 +56,27 @@ class CostEstimateSummaryPage extends BasePage {
   }
 
   async validateCostEstimatedSummary(data) {
-    await expect(this.machineType).toHaveText(data.n1_standard_2);
-    //validate Operating System / Software Paid: SLES
+    await expect(this.machineType).toHaveText(data.machine_type);
+    //validate Operating System / Software Paid
     await expect(this.operatingSystem).toHaveText(data.operating_system);
-    //validate GPU Model NVIDIA TESLA P4
+    //validate GPU Model
     await expect(this.gpuModel).toHaveText(data.GPU_Model);
-    //validate Number of GPUs 2
+    //validate Number of GPUs
     await expect(this.numberOfGPUs).toHaveText(data.GPUs);
-    //validate Local SSD 2x375 GB
-    await expect(this.localSSD).toHaveText(data.localSSD);
-    //validate Number of Instances 4
+    //validate Local SSD
+    await expect(this.localSSD).toHaveText(data.local_SSD);
+    //validate Number of Instances
     await expect(this.numberOfInstances).toHaveText(data.instances);
-    // validate Provisioning Model Regular
-    await expect(this.provisioningModelRegular).toHaveText(
-      data.provisional_model
-    );
+    // validate Provisioning Model
+    await expect(this.provisioningModel).toHaveText(data.provisional_model);
     // validate Add GPUs true
     await expect(this.addGPUSSwitch).toHaveText(data.add_GPUs);
-    // Region Northern Virginia (us-east4)
+    // Region
     await expect(this.regionDataCenter).toHaveText(data.region_data_center);
-    // Committed use discount options 1 year
+    // Committed use discount options
     await expect(this.discountTime).toHaveText(data.discount_time);
-    // validate Total estimated cost 2637,35 $ / mo
-    const costEstimatedText = await this.totalCost;
-    const costEstimatedTextExpected = "Total estimated cost\n2637,35 $/ mo";
-    await expect(costEstimatedText).toHaveText(costEstimatedTextExpected);
+    // validate Total estimated cost {amount} $ / mo
+    await expect(this.totalCost).toHaveText(data.estimated_cost);
   }
 }
 

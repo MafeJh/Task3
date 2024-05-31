@@ -1,6 +1,6 @@
 const BaseComponent = require("./../common/base.component");
 
-class ComputeEngineFormComponent extends BaseComponent {
+class FormComponent extends BaseComponent {
   constructor() {
     super("div.vHartc");
   }
@@ -12,8 +12,12 @@ class ComputeEngineFormComponent extends BaseComponent {
     return this.rootEl.$("//div[@data-field-type='106']");
   }
 
-  get provisioningModelRegular() {
-    return this.rootEl.$("//label[contains(text(),'Regular')]");
+  provisioningModel(provisioningModel) {
+    const selectors = {
+      regular: "input#regular[type='radio'] + label",
+      spot: "input#spot[type='radio'] + label",
+    };
+    return this.rootEl.$(selectors[provisioningModel]);
   }
 
   get machineFamilyDropdown() {
@@ -50,9 +54,14 @@ class ComputeEngineFormComponent extends BaseComponent {
     return this.rootEl.$("div[data-field-type='115']");
   }
 
-  get committedUsage() {
-    return this.rootEl.$("label[for='1-year']");
+  committedUsage(usage) {
+    const selectors = {
+      none: "input#none[type='radio'] + label",
+      1: "//input[@id='1-year'][@type='radio']/following-sibling::*[1]/self::label",
+      3: "//input[@id='3-years'][@type='radio']/following-sibling::*[1]/self::label",
+    };
+    return this.rootEl.$(selectors[usage]);
   }
 }
 
-module.exports = ComputeEngineFormComponent;
+module.exports = FormComponent;

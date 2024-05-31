@@ -1,0 +1,12 @@
+{
+  "home_google_cloud": {
+    "pricing_calculator": "Google Cloud Platform Pricing Calculator"
+  },
+  "compute_engine_form": {
+    "estimated_cost": "394,20 $",
+    "provisioning_model": "regular"
+  },
+  "cost_estimated_summary": {
+    "estimated_cost": "Total estimated cost\n394,20 $/ mo"
+  }
+}
