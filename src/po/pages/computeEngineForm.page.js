@@ -155,26 +155,6 @@ class ComputeEngineFormPage extends BasePage {
     await item.click();
   }
 
-  async clickOnNumberOfGPUsDropdown() {
-    const dropdown = await this.form.numberOfGPUsDropdown;
-    await dropdown.waitForDisplayed({ timeout: 5000 });
-    await dropdown.click();
-  }
-
-  async selectNumberOfGPUs(number) {
-    const selectors = {
-      2: "li[data-value='2']",
-    };
-    await this.clickOnNumberOfGPUsDropdown();
-    const item = this.form.item(
-      this.form.numberOfGPUsDropdown,
-      selectors,
-      number
-    );
-    await item.waitForDisplayed({ timeout: 5000 });
-    await item.click();
-  }
-
   async clickOnLocalSSDDropdown() {
     const dropdown = await this.form.localSSDDropdown;
     await dropdown.waitForDisplayed({ timeout: 5000 });
