@@ -5,9 +5,7 @@ class ProductsDialogComponent extends BaseComponent {
     super("div[jsname='rZHESd']");
   }
   get computeEngineCard() {
-    return this.rootEl.$(
-      "// div[@class='VobRQb'][1] // div[@class='aHij0b-WsjYwc aHij0b-WsjYwc-OWXEXe-wdeprb-MD85tf-DKzjMe b9Ejl']"
-    );
+    return this.rootEl.$("//h2[contains(text(),'Compute Engine')]");
   }
 
   get title() {
