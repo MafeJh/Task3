@@ -1,12 +1,12 @@
-const environment = process.env.SUITE || "regression";
+const suite = process.env.SUITE || "regression";
 const CONFIG_ENV = {
   smoke: ["./../tests/googleCloudSmoke.tests.js"],
-  regression: ["./../tests/*.tests.js"],
+  regression: ["./../tests/googleCloud.tests.js"],
 };
 
 exports.config = {
   runner: "local",
-  specs: CONFIG_ENV[environment.trim()],
+  specs: CONFIG_ENV[suite.trim()],
   exclude: [],
 
   maxInstances: 10,
