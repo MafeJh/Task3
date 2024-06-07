@@ -41,7 +41,13 @@ For use this project clone from the repository https://github.com/MafeJh/Task3.g
 - `wdio:prod`
 - `wdio:dev`
 
-The smoke test ensure the main path it's Ok, and look for the items in the form that exist (don't select), for this reason is the same independent of the environment.
+You can work with:
+
+- `NODE_ENV` With the environment values like `dev` and `prod`
+
+- `SUITE` With the types of tests like `smoke` and `regression`
+
+The smoke test ensure the main path it's Ok, validating the items exist.
 
 The prod environment has different values from dev environment, but runs in the same script.
 

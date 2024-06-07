@@ -2,7 +2,7 @@ const { pages } = require("./../po");
 const { datasets } = require("../utils");
 const env = process.env.NODE_ENV;
 
-describe(`${env.toUpperCase()}: Google Cloud Computing Page`, () => {
+describe(`${env.toUpperCase()}: Google Cloud Computing Page E2E Test`, () => {
   let homePage = null;
   let resultsPage = null;
   let pricingCalculatorPage = null;

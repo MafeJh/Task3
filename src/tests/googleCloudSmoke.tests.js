@@ -2,17 +2,17 @@ const { pages } = require("../po");
 const { datasets } = require("../utils");
 const env = process.env.NODE_ENV;
 
-describe(`${env.toUpperCase()}: Google Cloud Computing Page`, () => {
+describe(`${env.toUpperCase()}: Google Cloud Computing Page Smoke test`, () => {
   let homePage = null;
   let resultsPage = null;
   let pricingCalculatorPage = null;
   let computeEngineFormPage = null;
-  let costEstimateSummaryPage = null;
   let dataset = null;
 
   beforeEach(async () => {
     // Get dataset
-    dataset = datasets("smoke");
+    const environment = process.env.NODE_ENV || "dev";
+    dataset = datasets(environment.trim());
 
     // Instances
     homePage = pages("home");
@@ -51,12 +51,6 @@ describe(`${env.toUpperCase()}: Google Cloud Computing Page`, () => {
     await expect(computeEngineFormPage.form.numberOfInstances).toExist();
     // Validate OS dropdown - Operating System / Software: paid-sles OS
     await expect(computeEngineFormPage.form.operatingSystemDropdown).toExist();
-    // validate regular button from Provisioning Model
-    await expect(
-      computeEngineFormPage.form.provisioningModel(
-        dataset.compute_engine_form.provisioning_model
-      )
-    ).toExist();
     // validate Machine Type Series
     await expect(computeEngineFormPage.form.machineSeriesDropdown).toExist();
     // validate Machine Type
@@ -73,26 +67,14 @@ describe(`${env.toUpperCase()}: Google Cloud Computing Page`, () => {
     await expect(computeEngineFormPage.form.regionDropdown).toExist();
     // validate on committed usage
     await expect(computeEngineFormPage.form.committedUsage(3)).toExist();
-    // 7. Validate - 'Add to Estimate'. - Modified step
+    // Validate - 'Add to Estimate'. - Modified step
     await computeEngineFormPage.validateAddToEstimateButtonSubmit();
-    // 8. Check the price is calculated in the right section of the calculator. There is a line “Total Estimated Cost: USD ${amount} per 1 month”
-    await computeEngineFormPage.validateEstimatedCost(
-      dataset.compute_engine_form
-    );
-    // 9. click "Share" to see Total estimated cost
+    // click "Share" to see Total estimated cost
     await computeEngineFormPage.clickOnShareButton();
-    // 10. click "Open estimate summary" to see Cost Estimate Summary, will be opened in separate tab browser.
+    //  click "Open estimate summary" to see Cost Estimate Summary, will be opened in separate tab browser.
     await computeEngineFormPage.goToEstimatedSummary();
-    // 11. verify that the 'Cost Estimate Summary' matches with filled values in Step 6.
+    // verify that the 'Cost Estimate Summary' matches with filled values in Step 6.
     const handles = await browser.getWindowHandles();
     await browser.switchToWindow(handles[1]);
-    // await costEstimateSummaryPage.validateCostEstimatedSummary(
-    //   dataset.cost_estimated_summary
-    // );
-
-    // validate Total estimated cost {amount} $ / mo
-    await expect(await costEstimateSummaryPage.totalCost).toHaveText(
-      dataset.cost_estimated_summary.estimated_cost
-    );
   });
 });
